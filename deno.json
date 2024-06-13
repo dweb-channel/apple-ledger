@@ -1,0 +1,21 @@
+{
+  "lock": false,
+  "tasks": {
+    "dev": "deno run -A --watch=static/,src/ app.ts",
+    "build": "deno run -A dev.ts build",
+    "update": "deno run -A -r https://fresh.deno.dev/update ."
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "oak"
+      ]
+    }
+  },
+  "exclude": [
+  ],
+  "imports": {
+  },
+  "compilerOptions": {
+  }
+}
