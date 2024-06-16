@@ -1,16 +1,17 @@
-# Fresh project
+# Dledger
 
-Your new Fresh project is ready to go. You can follow the Fresh "Getting
-Started" guide here: https://fresh.deno.dev/docs/getting-started
+dweb-browser 快捷记账应用。
 
-### Usage
+## init
 
-Make sure to install Deno: https://deno.land/manual/getting_started/installation
+第一次运行初始化数据库。
 
-Then start the project:
-
+```bash
+deno task init
 ```
+
+## 启动应用
+
+```bash
 deno task start
 ```
-
-This will watch the project directory and restart as necessary.
