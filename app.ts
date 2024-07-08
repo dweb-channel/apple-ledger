@@ -21,11 +21,25 @@ app.addEventListener("listen", ({ hostname, port, secure }) => {
   console.log(
     `Listening on: ${secure ? "https://" : "http://"}${
       hostname ?? "localhost"
-    }:${port}`
+    }:${port}`,
   );
 });
 
-await app.listen({ port: 8000, hostname: "192.168.1.99" });
+const interfaces = Deno.networkInterfaces();
+
+function getIPAddress() {
+  for (const net of interfaces) {
+    if (net.family === "IPv4" && !net.address.includes("127.0.0.1")) {
+      return net.address;
+    }
+  }
+  return "0.0.0.0";
+}
+
+const ip = getIPAddress();
+console.log(`Your IP address is: ${ip}`);
+
+await app.listen({ port: 8000, hostname: ip });
 
 // 处理进程终止信号并关闭数据库连接
 function cleanUp() {

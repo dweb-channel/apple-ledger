@@ -5,7 +5,7 @@ import db from "../database/db.ts";
 /**
  * 创建用户表
  * auto_hash 自动化ID
- * */
+ */
 db.execute(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,6 +37,8 @@ db.execute(`
   )
 `);
 
+db.execute(`DROP TRIGGER IF EXISTS update_users_updated_at`);
+
 // -- 用户表的触发器
 db.execute(`
   CREATE TRIGGER update_users_updated_at
@@ -46,6 +48,8 @@ db.execute(`
     UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = OLD.id;
   END;
 `);
+
+db.execute(`DROP TRIGGER IF EXISTS update_ledgers_updated_at`);
 
 // -- 账本表的触发器
 db.execute(`
@@ -61,7 +65,7 @@ END;
 const key = await crypto.subtle.generateKey(
   { name: "HMAC", hash: "SHA-512" },
   true,
-  ["sign", "verify"]
+  ["sign", "verify"],
 );
 
 // 导出密钥为 JWK 格式
