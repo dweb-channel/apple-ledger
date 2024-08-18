@@ -11,17 +11,18 @@ export const createUser = (
   );
 };
 
-type password = string;
-type auto_hash = string;
 export const findUserByUsername = (
   username: string
-): [password, auto_hash] | null => {
-  const result: any[] = db.query(
-    "SELECT password FROM users WHERE username = ?",
+) => {
+  const result = db.queryEntries<{
+    password: string;
+    auto_hash: string;
+  }>(
+    "SELECT password,auto_hash FROM users WHERE username = ?",
     [username]
   );
 
-  if (result.length > 0 && result[0].length > 0) {
+  if (result.length > 0) {
     return result[0];
   }
 

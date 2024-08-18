@@ -12,6 +12,7 @@ db.execute(`
     username TEXT UNIQUE,
     password TEXT,
     auto_hash TEXT,
+    avatar TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at DATETIME
@@ -61,6 +62,8 @@ BEGIN
 END;
 `);
 
+console.log("%cInit DataBase Complete。", "color: blue");
+
 // generate_key.ts
 const key = await crypto.subtle.generateKey(
   { name: "HMAC", hash: "SHA-512" },
@@ -74,4 +77,4 @@ const exportedKey = await crypto.subtle.exportKey("jwk", key);
 // 将密钥存储到文件中
 await Deno.writeTextFile("jwt_hmac_key.json", JSON.stringify(exportedKey));
 
-console.log("Key generated and stored in jwt_hmac_key.json");
+console.log("%Key generated and stored in jwt_hmac_key.json","color: green");

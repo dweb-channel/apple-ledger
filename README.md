@@ -15,3 +15,27 @@ deno task init
 ```bash
 deno task start
 ```
+
+## API
+
+1. 快捷指令添加一条消息。
+```bash
+/add/:auto_hash
+```
+
+2. 用户注册
+
+```bash
+/user/register
+```
+3. 用户登陆
+
+```bash
+/user/login
+```
+
+4. 用户删除
+
+```bash
+/user/delete
+```
