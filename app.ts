@@ -1,4 +1,4 @@
-import db from "./database/db.ts";
+import { sqlite } from "./database/db.ts";
 import { Application, factory } from "./deps.ts";
 import authRoutes from "./src/routers/auth.ts";
 import baseRoutes from "./src/routers/base.ts";
@@ -44,7 +44,7 @@ await app.listen({ port: 8000, hostname: ip });
 // 处理进程终止信号并关闭数据库连接
 function cleanUp() {
   console.log("Closing the database connection...");
-  db.close();
+  sqlite.close()
   console.log("Database connection closed.");
   Deno.exit();
 }

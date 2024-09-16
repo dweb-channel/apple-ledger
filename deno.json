@@ -3,7 +3,7 @@
   "tasks": {
     "start": "deno run -A --watch=static/,src/ app.ts",
     "build": "deno run -A dev.ts build",
-    "init":"deno run -A ./scripts/init.ts",
+    "init": "deno run -A ./scripts/init.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
   },
   "lint": {
@@ -13,9 +13,10 @@
       ]
     }
   },
-  "exclude": [
-  ],
+  "exclude": [],
   "imports": {
+    "drizzle-kit": "npm:drizzle-kit@^0.24.2",
+    "expo-sqlite": "npm:expo-sqlite@^14.0.6"
   },
   "compilerOptions": {
   }

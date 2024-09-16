@@ -1,49 +1,60 @@
-import db from "../../database/db.ts";
+import { sql } from "npm:drizzle-orm";
+import { eq } from "npm:drizzle-orm/expressions";
+import { integer, sqliteTable, text } from "npm:drizzle-orm/sqlite-core";
+import { db } from "../../database/db.ts";
 
-export const createUser = (
+// 用户表
+export const users = sqliteTable("users", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  username: text("username").unique().notNull(),
+  password: text("password").notNull(),
+  autoHash: text("auto_hash").notNull(),
+  avatar: text("avatar"),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  deletedAt: integer("deleted_at", { mode: "timestamp" }),
+});
+
+export const createUser = async (
   username: string,
   password: string,
-  auto_hash: string
+  autoHash: string,
 ) => {
-  db.query(
-    "INSERT INTO users (username, password,auto_hash) VALUES (?, ?, ?)",
-    [username, password, auto_hash]
-  );
+  await db.insert(users).values({ username, password, autoHash:autoHash });
 };
 
-export const findUserByUsername = (
-  username: string
-) => {
-  const result = db.queryEntries<{
-    password: string;
-    auto_hash: string;
-  }>(
-    "SELECT password,auto_hash FROM users WHERE username = ?",
-    [username]
-  );
+export const findUserByUsername = async (username: string) => {
+  const result = await db
+    .select({
+      password: users.password,
+      auto_hash: users.autoHash,
+    })
+    .from(users)
+    .where(eq(users.username, username))
+    .limit(1);
 
-  if (result.length > 0) {
-    return result[0];
-  }
-
-  return null; // 若没有找到用户，返回 null
+  return result[0] || null;
 };
 
-type userId = number;
-export const findUserByAutoHash = (authHash: string): userId | null => {
-  const result: any[] = db.query("SELECT id FROM users WHERE auto_hash = ?", [
-    authHash,
-  ]);
+type $UserId = number;
+export const findUserByAutoHash = async (authHash: string): Promise<$UserId | null> => {
+  const result = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.autoHash, authHash))
+    .limit(1);
 
-  if (result.length > 0 && result[0].length > 0) {
-    return result[0][0];
-  }
-
-  return null; // 若没有找到用户，返回 null
+  return result[0]?.id || null;
 };
 
-export const deleteUserByUsername = (username: string) => {
-  db.query("DELETE FROM users WHERE username = ?", [username]);
+export const deleteUserByUsername = async (username: string) => {
+  await db
+    .delete(users)
+    .where(eq(users.username, username));
 };
 
 Deno.test("db-user", () => {

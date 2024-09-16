@@ -18,9 +18,8 @@ router.post(
     }
     const event: $LedgerEvent = await request.json();
     console.log(`用户${userId} 添加了记录：`, event);
-    // 插入账本事件，并设定记账时间
-    const timestamp = new Date().toISOString(); // 当前时间
-    // TODO
+    // 插入账本事件
+    // add(userId,JSON.stringify(event),timestamp)
     return Response.json({ message: "ok" }, { status: Status.OK });
   })
 );

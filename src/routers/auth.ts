@@ -13,7 +13,7 @@ router.put(
   "/user/register",
   route(async (req) => {
     const { username, password } = await req.json();
-    const data = findUserByUsername(username);
+    const data = await findUserByUsername(username);
     if (data !== null) {
       return Response.json(
         { message: "Name is occupied" },
@@ -38,7 +38,7 @@ router.post(
   "/user/login",
   route(async (request) => {
     const { username, password } = await request.json();
-    const data = findUserByUsername(username);
+    const data = await findUserByUsername(username);
     if (!data) {
       return Response.json({ message: "User not found" }, {
         status: Status.NotFound,

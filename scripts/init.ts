@@ -1,4 +1,4 @@
-import db from "../database/db.ts";
+import { sqlite } from "../database/db.ts";
 
 /// 初始化数据
 
@@ -6,7 +6,7 @@ import db from "../database/db.ts";
  * 创建用户表
  * auto_hash 自动化ID
  */
-db.execute(`
+sqlite.execute(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
@@ -23,12 +23,11 @@ db.execute(`
  * 创建账本表，并关联 user_id 与 users 表的 id
  * event :{ amount: "-10", class: "奶茶", event: "哈哈" }
  */
-db.execute(`
+sqlite.execute(`
   CREATE TABLE IF NOT EXISTS ledgers (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     events TEXT CHECK(json_valid(events)),
-    timestamp DATETIME,
     previousHash TEXT,
     hash TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -38,10 +37,10 @@ db.execute(`
   )
 `);
 
-db.execute(`DROP TRIGGER IF EXISTS update_users_updated_at`);
+sqlite.execute(`DROP TRIGGER IF EXISTS update_users_updated_at`);
 
 // -- 用户表的触发器
-db.execute(`
+sqlite.execute(`
   CREATE TRIGGER update_users_updated_at
   AFTER UPDATE ON users
   FOR EACH ROW
@@ -50,10 +49,10 @@ db.execute(`
   END;
 `);
 
-db.execute(`DROP TRIGGER IF EXISTS update_ledgers_updated_at`);
+sqlite.execute(`DROP TRIGGER IF EXISTS update_ledgers_updated_at`);
 
 // -- 账本表的触发器
-db.execute(`
+sqlite.execute(`
 CREATE TRIGGER update_ledgers_updated_at
 AFTER UPDATE ON ledgers
 FOR EACH ROW
