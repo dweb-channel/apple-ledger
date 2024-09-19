@@ -1,7 +1,9 @@
-import { DB } from "https://deno.land/x/sqlite@v3.8/mod.ts";
-import { drizzle } from "npm:drizzle-orm/better-sqlite3/driver";
+import { createClient } from 'npm:@libsql/client/node';
+import { drizzle } from 'npm:drizzle-orm/libsql';
 
-const sqlite =new DB("./database/ledger.db");
+const sqlite = createClient({
+  url: "file:./database/ledger.db"
+})
 
 const db = drizzle(sqlite);
 export {
