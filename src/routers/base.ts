@@ -19,7 +19,7 @@ router.post(
     const event: $LedgerEvent = await request.json();
     console.log(`用户${userId} 添加了记录：`, event);
     // 插入账本事件
-    // add(userId,JSON.stringify(event),timestamp)
+    // const block = new Block();
     return Response.json({ message: "ok" }, { status: Status.OK });
   })
 );

@@ -24,7 +24,13 @@ export const createUser = async (
   password: string,
   autoHash: string,
 ) => {
-  await db.insert(users).values({ username, password, autoHash:autoHash });
+  const res = await db
+    .insert(users)
+    .values({ username, password, autoHash })
+    .returning({ id: users.id })
+    .run();
+
+  return Number(res[0].id);
 };
 
 export const findUserByUsername = async (username: string) => {
@@ -41,7 +47,9 @@ export const findUserByUsername = async (username: string) => {
 };
 
 type $UserId = number;
-export const findUserByAutoHash = async (authHash: string): Promise<$UserId | null> => {
+export const findUserByAutoHash = async (
+  authHash: string,
+): Promise<$UserId | null> => {
   const result = await db
     .select({ id: users.id })
     .from(users)

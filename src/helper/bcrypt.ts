@@ -46,6 +46,11 @@ export const verifyJwt = (jwt: string) => {
   return verify(jwt, key);
 };
 
+export const bufferToHex = (hashBuffer:ArrayBuffer) => Array.from(new Uint8Array(hashBuffer))
+.map((b) => b.toString(16).padStart(2, "0"))
+.join("")
+
+
 Deno.test("HMAC-SHA-512", async () => {
   const pyload = "🍓";
   const jwt = await passwordJwt(pyload);

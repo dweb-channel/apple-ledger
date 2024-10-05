@@ -1,4 +1,5 @@
 import { route, Router, Status } from "../../deps.ts";
+import { createGenesisBlock } from "../blockchain/block.ts";
 import {
   comparePassword,
   getUserAutoHash,
@@ -23,12 +24,15 @@ router.put(
     // 创建密码
     const hashedPassword = await passwordJwt(password);
     // 创建自动化hash
-    const auto_hash = await getUserAutoHash(username);
-    createUser(username, hashedPassword, auto_hash);
+    const autoHash = await getUserAutoHash(username);
+    // 创建用户
+    const userId = await createUser(username, hashedPassword, autoHash);
+    // 创建用户创世区块，每个用户拥有一条链
+    const block =  createGenesisBlock(userId);
     return Response.json(
       {
         message: "User registered successfully",
-        data: { username: username, auto_hash: auto_hash },
+        data: { username: username, auto_hash: autoHash,genesis_block:block.hash },
       },
       { status: 201 },
     );
@@ -47,7 +51,7 @@ router.post(
     const userPassword = data.password;
     const auto_hash = data.auto_hash;
     const validPassword = await comparePassword(password, userPassword);
-    console.log("userPassword, auto_hash",userPassword, auto_hash)
+    // console.log("userPassword, auto_hash",userPassword, auto_hash)
 
     if (!validPassword) {
       return Response.json({ message: "Invalid password" }, {
@@ -56,7 +60,6 @@ router.post(
     }
     // 生成token
     const token = await generateUserToken(username);
-    console.log("token",token)
     return Response.json(
       { auto_hash: auto_hash, token: token },
       { status: 200 },

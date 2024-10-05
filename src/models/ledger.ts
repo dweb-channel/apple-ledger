@@ -22,7 +22,7 @@ export const ledgers = sqliteTable("ledgers", {
   
 });
 
-
+/**添加记账事件 */
 export const add = async (
   userId: number,
   eventJson: string,
@@ -37,7 +37,7 @@ export const add = async (
   });
 };
 
-/**添加记账事件 */
+/**获取用户记账事件 */
 export const getUserEvent = async (userId: number) => {
   const rows = await db
     .select({ events: ledgers.events })
@@ -58,7 +58,7 @@ export const getUserEvent = async (userId: number) => {
     return validResults
 };
 
-const updateEventData = async (
+export const updateEventData = async (
   id: number,
   eventData: $LedgerEvent,
   updateIndex: number,
@@ -83,7 +83,7 @@ const updateEventData = async (
     .update(ledgers)
     .set({ events: JSON.stringify(events) })
     .where(eq(ledgers.id, id));
-  if (updateResult.changes === 0) {
+  if (updateResult.columns.length === 0) {
     return false;
   } else {
     return true;
