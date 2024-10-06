@@ -59,7 +59,7 @@ router.post(
       });
     }
     // 生成token
-    const token = await generateUserToken(username);
+    const token = await generateUserToken(data.id,username);
     return Response.json(
       { auto_hash: auto_hash, token: token },
       { status: 200 },

@@ -36,6 +36,7 @@ export const createUser = async (
 export const findUserByUsername = async (username: string) => {
   const result = await db
     .select({
+      id: users.id,
       password: users.password,
       auto_hash: users.autoHash,
     })
@@ -66,17 +67,6 @@ export const deleteUserByUsername = async (username: string) => {
 };
 
 Deno.test("db-user", () => {
-  // Run a simple query
-  // for (const username of ["Peter Parker", "Clark Kent", "Bruce Wayne"]) {
-  //   createUser(username,"xxx")
-  // }
   const row = findUserByUsername("Peter Parker");
   console.log(row);
-  // Print out data in table
-  // for (const [username,password] of userDb.query("SELECT username FROM users")) {
-  //   console.log(username,password);
-  // }
-
-  // Close connection
-  // userDb.close();
 });
