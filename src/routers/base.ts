@@ -23,7 +23,7 @@ router.post(
     const lastBlock = await getLastBlock(userId);
     console.log(`用户${userId} 添加了记录：`, event);
     // 插入账本事件
-    const block = new Block(lastBlock.hash,Date.now(),[event]);
+    const block = new Block(lastBlock.hash, Date.now(), [event]);
     return Response.json({ message: "ok" }, { status: Status.OK });
   }),
 );

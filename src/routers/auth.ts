@@ -28,11 +28,15 @@ router.put(
     // 创建用户
     const userId = await createUser(username, hashedPassword, autoHash);
     // 创建用户创世区块，每个用户拥有一条链
-    const block =  createGenesisBlock(userId);
+    const block = createGenesisBlock(userId);
     return Response.json(
       {
         message: "User registered successfully",
-        data: { username: username, auto_hash: autoHash,genesis_block:block.hash },
+        data: {
+          username: username,
+          auto_hash: autoHash,
+          genesis_block: block.hash,
+        },
       },
       { status: 201 },
     );
@@ -59,7 +63,7 @@ router.post(
       });
     }
     // 生成token
-    const token = await generateUserToken(data.id,username);
+    const token = await generateUserToken(data.id, username);
     return Response.json(
       { auto_hash: auto_hash, token: token },
       { status: 200 },
